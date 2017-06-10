@@ -102,3 +102,6 @@ ENV/
 
 # visual studio
 .vs/
+
+# certificate
+*.pem
