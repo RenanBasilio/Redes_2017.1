@@ -6,9 +6,9 @@ Grupo: Renan Basilio, Luis Eduardo Pessoa, Caio Alves
 <br>
 <br>
 <br>
-Relatório: *Link da Apresentação no Google Drive*
+Relatório: *Link do Relatório no Google Drive*
 
-Apresentação: *Link do Trabalho no Google Drive*
+Apresentação: *Link da Apresentação no Google Drive*
 
 ----------
 
@@ -20,7 +20,7 @@ Apresentação: *Link do Trabalho no Google Drive*
 1. Habilitar função *Bash on Ubuntu on Windows*. [Link com instruções de como fazer.](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/) 
 
 2. Na shell de bash, navegar até o diretório de saída desejado (de preferência o mesmo diretório onde se encontra o servidor).
-3. Executar o comando a seguir e preencher os dados necessários.
+3. Executar o comando a seguir e preencher os dados necessários. O "COMMON NAME" deve ser o endereço que o certificado representa (por exemplo, para localhost, 127.0.0.1).
 
     `openssl req -new -x509 -days 365 -nodes -out cert_chatRedes.pem -keyout key_chatRedes.pem`
 
@@ -37,7 +37,7 @@ Apresentação: *Link do Trabalho no Google Drive*
 
 3. Abrir Prompt de Comando na pasta `bin` do diretório de instalação.
 
-4. Executar o comando a seguir e preencher os dados necessários.
+4. Executar o comando a seguir e preencher os dados necessários. O "COMMON NAME" deve ser o endereço que o certificado representa (por exemplo, para localhost, 127.0.0.1).
 
     `openssl req -new -x509 -days 365 -nodes -out cert_chatRedes.pem -keyout key_chatRedes.pem`
 

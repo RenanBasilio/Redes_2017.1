@@ -49,7 +49,7 @@ while keepRunning:
     # Get user input
     server_input = input('> ');
     # Generate interface command packet with user input and send to server
-    packet = json.dumps({'cmd':str.lower(server_input)}).encode('utf-8');
+    packet = json.dumps({'cmd':str.upper(server_input)}).encode('utf-8');
     interface_socket.send(packet);
     # Receive and print response from server
     data = interface_socket.recv(backend.SIZE);

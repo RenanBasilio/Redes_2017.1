@@ -83,7 +83,7 @@ def server_backend(wait_for_interface = False, interface_pass = None):
                 # Handle server interface commands
                 data = s.recv(SIZE)
                 message = json.loads(data.decode('utf-8'));
-                if message['cmd'] == 'exit':
+                if message['cmd'] == 'EXIT':
                     # This command exits the server
                     response = json.dumps({'rsp':'EXIT', 'str':'Server shutting down...'}).encode('utf-8');
                     keepRunning = False;
