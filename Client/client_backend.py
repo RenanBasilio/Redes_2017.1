@@ -3,7 +3,9 @@ import ssl
 import json
 import enum
 import time
+from queue import Queue
 from threading import Thread
+from threading import Event
 
 SIZE = 1024
 
@@ -24,7 +26,7 @@ class ClientState(enum.Enum):
     WRITING = 4
 
 class ClientBackend:
-    
+
     def __init__(self, ip, port, username, color, admin_pass = False):
         self.ip = ip;
         self.port = port;
@@ -34,6 +36,8 @@ class ClientBackend:
             self.is_admin = True;
         else:
             self.is_admin = False;
+        self.message_received_event = Event();
+        self.message_queue = Queue();
         self.state = ClientState.READY;
 
     def change_ip(self, ip):
@@ -86,9 +90,11 @@ class ClientBackend:
                 else:
                     if packet['type'] == 'MSG':
                         print(packet['uname'], ": ", packet['msg']);
+                        self.message_queue.put(packet);
+                        self.message_received_event.set();
                 self.state = ClientState.CONNECTED;
         except:
-            print("Connection closed by server.")
+            print("Lost connection to server. Exception ocurred.")
             self.sock.close();
             self.state = ClientState.READY;
 

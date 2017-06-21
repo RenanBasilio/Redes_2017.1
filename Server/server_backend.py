@@ -105,6 +105,7 @@ def server_backend(wait_for_interface = False, interface_pass = None):
                         if message['type'] == 'NEWUSR':
                             print("Client connected with username {username}.".format(username=message['uname']));
                             response = json.dumps({'type':'OK'}).encode('utf-8');
+                            s.send(response);
                         elif message['type'] == 'MSG':
                             print("Received message from {username}: {message}.".format(username=message['uname'], message=message['msg']))
                             for c in client_sources:
@@ -112,10 +113,10 @@ def server_backend(wait_for_interface = False, interface_pass = None):
                                     c.send(data);
                         else:
                             response = json.dumps({'type':'ERROR'}).encode('utf-8');
-                        s.send(response);
+                            s.send(response);
                 except:
                     s.close()
-                    print("Client disconnected.")
+                    print("Client disconnected. Exception ocurred.")
                     client_sources.remove(s)
 
     # Close open sockets in input sources
