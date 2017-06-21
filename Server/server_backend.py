@@ -107,8 +107,9 @@ def server_backend(wait_for_interface = False, interface_pass = None):
                             response = json.dumps({'type':'OK'}).encode('utf-8');
                         elif message['type'] == 'MSG':
                             print("Received message from {username}: {message}.".format(username=message['uname'], message=message['msg']))
-                            for s in client_sources:
-                                s.send(data);
+                            for c in client_sources:
+                                if s != c:
+                                    c.send(data);
                         else:
                             response = json.dumps({'type':'ERROR'}).encode('utf-8');
                         s.send(response);

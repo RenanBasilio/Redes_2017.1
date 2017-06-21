@@ -2,6 +2,7 @@ import socket
 import ssl
 import json
 import enum
+import time
 from threading import Thread
 
 SIZE = 1024
@@ -19,6 +20,8 @@ class ClientState(enum.Enum):
     READY = 0
     CONNECTED = 1
     STOP = 2
+    READING = 3
+    WRITING = 4
 
 class ClientBackend:
     
@@ -74,16 +77,16 @@ class ClientBackend:
 
     def listen(self):
         try:
-            while self.state == ClientState.CONNECTED:
+            while self.state != ClientState.STOP:
                 data = self.sock.recv(SIZE);
                 packet = json.loads(data.decode('utf-8'));
                 if not packet:
                     print("Connection closed by server.");
                     self.sock.close();
-                    self.state = ClientState.READY;
                 else:
                     if packet['type'] == 'MSG':
                         print(packet['uname'], ": ", packet['msg']);
+                self.state = ClientState.CONNECTED;
         except:
             print("Connection closed by server.")
             self.sock.close();
@@ -94,6 +97,7 @@ class ClientBackend:
         self.sock.send(packet);
 
     def close(self):
+        self.state = ClientState.STOP;
         self.sock.shutdown(socket.SHUT_RDWR);
         self.sock.close();
         self.state = ClientState.READY;

@@ -58,7 +58,7 @@ while keepRunning:
     
     # If command to exit was received, shut down
     if message['rsp'] == 'EXIT':
-        self.sock.shutdown(socket.SHUT_RDWR);
+        interface_socket.shutdown(socket.SHUT_RDWR);
         interface_socket.close();
         keepRunning = False;
 
