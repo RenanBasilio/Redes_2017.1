@@ -47,7 +47,7 @@ keepRunning = True;
 # While the program should continue to run
 while keepRunning:
     # Get user input
-    server_input = input('> ');
+    server_input = input('');
     # Generate interface command packet with user input and send to server
     packet = json.dumps({'type':'IFACE_CMD', 'cmd':str.upper(server_input)}).encode('utf-8');
     interface_socket.send(packet);
@@ -58,6 +58,7 @@ while keepRunning:
     
     # If command to exit was received, shut down
     if message['rsp'] == 'EXIT':
+        self.sock.shutdown(socket.SHUT_RDWR);
         interface_socket.close();
         keepRunning = False;
 

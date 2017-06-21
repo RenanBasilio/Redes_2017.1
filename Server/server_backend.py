@@ -60,16 +60,17 @@ def server_backend(wait_for_interface = False, interface_pass = None):
             client.close();
 
     # Register the server socket into input sources
-    input_sources = [server_socket]
+    server_sources = [server_socket]
+    client_sources = []
 
     # If using an interface socket, register it as well
     if interface_socket != None:
-        input_sources.append(interface_socket);
+        server_sources.append(interface_socket);
 
     while keepRunning:
         
         # Select to block until socket activity
-        inputready, outputready, exceptready = select.select(input_sources, [], [])
+        inputready, outputready, exceptready = select.select(server_sources+client_sources, [], [])
         
         # For each active socket
         for s in inputready:
@@ -78,7 +79,7 @@ def server_backend(wait_for_interface = False, interface_pass = None):
                 # Handle incoming connections
                 client, address = server_socket.accept();
                 ssl_client = server_context.wrap_socket(client, server_side=True);
-                input_sources.append(ssl_client);
+                client_sources.append(ssl_client);
 
             elif s == interface_socket:
                 # Handle server interface commands
@@ -92,20 +93,30 @@ def server_backend(wait_for_interface = False, interface_pass = None):
                     response = json.dumps({'rsp':'UNREC_CMD', 'str':'ERROR: Command not recognized.'}).encode('utf-8');
                 s.send(response);
             else:
-                # Handle client socket activity
-                data = s.recv(SIZE)
-                if data:
-                    message = json.loads(data.decode('utf-8'));
-                    if message['type'] == 'NEWUSR':
-                        print("Client connected with username {username}. \n\r>".format(username=message['uname']));
-                        response = json.dumps({'type':'OK'}).encode('utf-8');
+                try:
+                    # Handle client socket activity
+                    data = s.recv(SIZE)
+                    if not data:
+                        s.close()
+                        print("Client disconnected.")
+                        client_sources.remove(s)
                     else:
-                       response = json.dumps({'type':'ERROR'}).encode('utf-8');
-                    s.send(response);
-                else:
+                        message = json.loads(data.decode('utf-8'));
+                        if message['type'] == 'NEWUSR':
+                            print("Client connected with username {username}.".format(username=message['uname']));
+                            response = json.dumps({'type':'OK'}).encode('utf-8');
+                        elif message['type'] == 'MSG':
+                            print("Received message from {username}: {message}.".format(username=message['uname'], message=message['msg']))
+                            for s in client_sources:
+                                s.send(data);
+                        else:
+                            response = json.dumps({'type':'ERROR'}).encode('utf-8');
+                        s.send(response);
+                except:
                     s.close()
-                    input_sources.remove(s)
+                    print("Client disconnected.")
+                    client_sources.remove(s)
 
     # Close open sockets in input sources
-    for s in input_sources:
+    for s in client_sources:
         s.close();
