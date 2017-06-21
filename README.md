@@ -6,9 +6,9 @@ Grupo: Renan Basilio, Luis Eduardo Pessoa, Caio Alves
 <br>
 <br>
 <br>
-Relatório: *Link do Relatório no Google Drive*
+Relatório: [Link do Relatório no Google Drive](https://docs.google.com/document/d/1E5kbypW2U2MEW2rIclzTPN6D4J2eHRoYZ6nP7quBMVY/edit?usp=sharing)
 
-Apresentação: *Link da Apresentação no Google Drive*
+Apresentação: [Link da Apresentação no Google Drive](https://docs.google.com/presentation/d/10r1hcKxzYVjSaIdQgyaVE6xeA6spCOvcp8m8-z91EZc/edit?usp=sharing)
 
 ----------
 
