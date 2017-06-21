@@ -1,4 +1,6 @@
 from threading import Thread
+from random import choice
+from string import ascii_uppercase
 import socket
 import ssl
 import json
@@ -8,13 +10,13 @@ import server_backend as backend
 #############################################################################################################################
 #
 # Server.py
-# Version: 1.1
+# Version: 1.2
 # Author: Renan Basilio
 # Description: This module describes initialization and interface tasks for the chat server.
 #
 #############################################################################################################################
 
-interface_passkey = 1111;   # This is the passkey to authenticate the interface connection to the backend. Make random number later.
+interface_passkey = (''.join(choice(ascii_uppercase) for i in range(12)));   # This is the passkey to authenticate the interface connection to the backend. Make random number later.
 
 # Initialize server backend thread
 print("Initializing server...");
