@@ -20,19 +20,15 @@ scrollbar.grid(row=0, column=20, sticky=N+S+W+E)
 scrollbar.config(command=messages.yview)
 messages.config(yscrollcommand=scrollbar.set)
 
-
-input_user = StringVar()
-input_field = Entry(window, text=input_user)
-input_field.grid(sticky=W+E+N+S, row=1, column=1, rowspan=2, columnspan=18, pady=(5, 0))
-enter_button = Button(window, text='Send')
-enter_button.grid(row=1, column=19, columnspan=2, rowspan=2, sticky=W+E+N+S, pady=(5, 0))
-
 def Enter_pressed(event):
+    Send_Message();
+    return "break"
+
+def Send_Message():
     input_get = input_field.get()
     server_connection.send(input_get)
     messages.insert(INSERT, '{username}: {message}\n'.format(username=my_username, message=input_get))
     input_user.set('')
-    return "break"
 
 def Wait_Event(messages):
     while keepRunning:
@@ -41,6 +37,12 @@ def Wait_Event(messages):
             messages.insert(INSERT, '{username}: {message}\n'.format(username=message['uname'], message=message['msg']))
         else:
             server_connection.message_received_event.wait(100);
+
+input_user = StringVar()
+input_field = Entry(window, text=input_user)
+input_field.grid(sticky=W+E+N+S, row=1, column=1, rowspan=2, columnspan=18, pady=(5, 0))
+enter_button = Button(window, text='Send', command=Send_Message)
+enter_button.grid(row=1, column=19, columnspan=2, rowspan=2, sticky=W+E+N+S, pady=(5, 0))
 
 frame = Frame(window)  # , width=300, height=300)
 input_field.bind("<Return>", Enter_pressed)
