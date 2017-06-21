@@ -25,6 +25,9 @@
     <Compile Include="client_backend.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="login_window.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="simple_iface.py">
       <SubType>Code</SubType>
     </Compile>

@@ -106,5 +106,6 @@ class ClientBackend:
         self.state = ClientState.STOP;
         self.sock.shutdown(socket.SHUT_RDWR);
         self.sock.close();
+        self.listen_thread.join();
         self.state = ClientState.READY;
         print("Socket closed.")
