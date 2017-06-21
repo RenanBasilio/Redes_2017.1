@@ -11,7 +11,7 @@ SIZE = 1024
 #############################################################################################################################
 #
 # Server Backend
-# Version: 1.0
+# Version: 1.1
 # Author: Renan Basilio
 # Description: This module describes the method that runs in the background of our server.
 # Arguments:
@@ -76,12 +76,13 @@ def server_backend(wait_for_interface = False, interface_pass = None):
 
             if s == server_socket:
                 # Handle incoming connections
-                client, address = server.accept()
-                input.append(client)
+                client, address = server_socket.accept();
+                ssl_client = server_context.wrap_socket(client, server_side=True);
+                input_sources.append(ssl_client);
 
             elif s == interface_socket:
                 # Handle server interface commands
-                data = s.recv(SIZE)
+                data = s.recv(SIZE);
                 message = json.loads(data.decode('utf-8'));
                 if message['cmd'] == 'EXIT':
                     # This command exits the server
@@ -95,6 +96,12 @@ def server_backend(wait_for_interface = False, interface_pass = None):
                 data = s.recv(SIZE)
                 if data:
                     message = json.loads(data.decode('utf-8'));
+                    if message['type'] == 'NEWUSR':
+                        print("Client connected with username {username}. \n\r>".format(username=message['uname']));
+                        response = json.dumps({'type':'OK'}).encode('utf-8');
+                    else:
+                       response = json.dumps({'type':'ERROR'}).encode('utf-8');
+                    s.send(response);
                 else:
                     s.close()
                     input_sources.remove(s)

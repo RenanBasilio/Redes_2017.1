@@ -8,7 +8,7 @@ import server_backend as backend
 #############################################################################################################################
 #
 # Server.py
-# Version: 1.0
+# Version: 1.1
 # Author: Renan Basilio
 # Description: This module describes initialization and interface tasks for the chat server.
 #
@@ -35,7 +35,7 @@ interface_socket = context.wrap_socket(socket.socket(socket.AF_INET, socket.SOCK
 interface_socket.connect(('127.0.0.1', backend.PORT));
 
 # Create connection packet with appropriate user and passkey
-auth_packet = json.dumps({'user':'server_interface', 'password':interface_passkey}).encode('utf-8');
+auth_packet = json.dumps({'type':'IFACE_CMD', 'user':'server_interface', 'password':interface_passkey}).encode('utf-8');
 
 # Send auth packet to server backend
 interface_socket.send(auth_packet);
@@ -49,7 +49,7 @@ while keepRunning:
     # Get user input
     server_input = input('> ');
     # Generate interface command packet with user input and send to server
-    packet = json.dumps({'cmd':str.upper(server_input)}).encode('utf-8');
+    packet = json.dumps({'type':'IFACE_CMD', 'cmd':str.upper(server_input)}).encode('utf-8');
     interface_socket.send(packet);
     # Receive and print response from server
     data = interface_socket.recv(backend.SIZE);
@@ -58,6 +58,7 @@ while keepRunning:
     
     # If command to exit was received, shut down
     if message['rsp'] == 'EXIT':
+        interface_socket.close();
         keepRunning = False;
 
 server_thread.join();
